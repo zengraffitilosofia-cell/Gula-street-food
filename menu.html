@@ -2,93 +2,420 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <link rel="icon" type="image/png" href="assets/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Carta | Street Food Gula</title>
+  <!-- Google Fonts + Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fef9f0;
+      color: #1e1a16;
+      transition: background-color 0.3s, color 0.2s;
+      scroll-behavior: smooth;
+    }
+
+    /* Modo oscuro */
+    body.dark {
+      background-color: #121212;
+      color: #f0e6d8;
+    }
+
+    body.dark .menu-header,
+    body.dark .floating-cta,
+    body.dark .category-filter button,
+    body.dark .card,
+    body.dark .extra-box,
+    body.dark .menu-gallery {
+      background-color: #1e1e1e;
+      color: #f0e6d8;
+      border-color: #333;
+    }
+
+    body.dark .card {
+      background: #2a2a2a;
+    }
+
+    body.dark .search-box input {
+      background: #2a2a2a;
+      color: #fff;
+      border-color: #444;
+    }
+
+    body.dark .category-filter button.active {
+      background-color: #e67e22;
+      color: white;
+    }
+
+    /* Header */
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 5%;
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .menu-header img {
+      height: 50px;
+      object-fit: contain;
+    }
+
+    .back-link {
+      text-decoration: none;
+      font-weight: 600;
+      color: #e67e22;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #e67e22;
+    }
+
+    /* layout principal */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 1rem 5% 3rem;
+    }
+
+    .menu-top {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .menu-top h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+    }
+
+    /* buscador y filtros */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-box {
+      flex: 2;
+      min-width: 200px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: 50px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: #e67e22;
+    }
+
+    .category-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .category-filter button {
+      background: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .category-filter button.active {
+      background-color: #e67e22;
+      color: white;
+    }
+
+    /* grid de categorías */
+    .category-section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 90px;
+    }
+
+    .category-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.8rem;
+      border-left: 6px solid #e67e22;
+      padding-left: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .category-note {
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      color: #7f6b5c;
+    }
+    body.dark .category-note {
+      color: #bbaa99;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.2rem;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+
+    .card .price {
+      font-weight: 800;
+      color: #e67e22;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: #4a3b2f;
+      line-height: 1.4;
+      margin: 0.5rem 0;
+    }
+    body.dark .card p {
+      color: #cfc5b8;
+    }
+
+    .extra-box {
+      background: #f3ede5;
+      border-radius: 20px;
+      padding: 1.2rem;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .extra-title {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    /* galería */
+    .menu-gallery {
+      margin-top: 4rem;
+      text-align: center;
+    }
+    .menu-gallery h2 {
+      font-family: 'Oswald', sans-serif;
+      margin-bottom: 1rem;
+    }
+    .menu-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .menu-gallery-grid img {
+      width: 100%;
+      border-radius: 20px;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+    }
+
+    /* botón flotante volver arriba */
+    .go-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 1.5rem;
+      background-color: #e67e22;
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.2s;
+      z-index: 99;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .go-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      max-width: 450px;
+      width: 90%;
+      border-radius: 28px;
+      padding: 1.8rem;
+      position: relative;
+      animation: fadeInUp 0.2s;
+    }
+    body.dark .modal-content {
+      background: #2a2a2a;
+      color: #f0e6d8;
+    }
+    .modal-content h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .allergens {
+      display: flex;
+      gap: 0.8rem;
+      margin: 1rem 0;
+      font-size: 1.2rem;
+    }
+    .close-modal {
+      position: absolute;
+      top: 12px;
+      right: 20px;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .floating-cta {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      background: #e67e22;
+      color: white;
+      padding: 0.7rem 1.2rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: bold;
+      z-index: 99;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    @media (max-width: 768px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .category-filter button {
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+      }
+      .menu-header {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      .category-title {
+        font-size: 1.5rem;
+      }
+    }
+    @media (min-width: 768px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1.2rem;
+    }
+  </style>
 </head>
 <body class="menu-page">
   <header class="menu-header">
-    <a href="index.html" class="back-link">← Inicio</a>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Inicio</a>
     <img src="assets/logo.png" alt="Street Food Gula">
-    <a href="https://share.google/LR1T3JtPwgAeuGcsm" target="_blank" rel="noopener" class="back-link">Ir</a>
+    <div style="display: flex; gap: 12px;">
+      <button class="theme-toggle" id="darkModeToggle" aria-label="Modo oscuro"><i class="fas fa-moon"></i></button>
+      <a href="https://share.google/LR1T3JtPwgAeuGcsm" target="_blank" class="back-link">Ir</a>
+    </div>
   </header>
 
-  <main class="menu-main container narrow">
-    <section class="menu-top">
-      <h1>Carta </h1>
-    </section>
-
-    <div class="accordion">
-      <section class="accordion-item open">
-        <button class="accordion-trigger">Empieza el Delirium… <span>+</span></button>
-        <div class="accordion-content">
-          <p class="menu-note">El hambre no espera turno. Empieza por aquí y déjate llevar.</p>
-          <div class="menu-item"><div><h3>Nacho criminal</h3><p>Nachos caseros con guacamole cremoso, pico de gallo fresco, cheddar fundido, chilli con carne bien sazonado, jalapeños frescos y un toque de sour cream.</p></div><strong>11.90€</strong></div>
-          <div class="menu-item"><div><h3>Trufados al barrio</h3><p>Patatas corte gajo, envueltas por ligereza y llovidas por encima con mayonesa de trufa y lluvia de parmesano.</p></div><strong>6.50€</strong></div>
-          <div class="menu-item"><div><h3>Patatas GULA</h3><p>Nuestras patatas estrella: base de patatas gruesotas con costilla desmenuzada, salsa casera “GULA” y crujiente de kikos.</p></div><strong>8.50€</strong></div>
-          <div class="menu-item"><div><h3>Solo Patatas, Pero Bien</h3><p>Patatas estilo dipper para empezar el vicio.</p></div><strong>6.50€</strong></div>
-          <div class="menu-item"><div><h3>Crunchy Finguers</h3><p>Tiras de pollo rebozadas con panko, bien caseras, bien crocantes, acompañadas con sour cream.</p></div><strong>10.00€</strong></div>
-          <div class="menu-item"><div><h3>Alitas Sweet Boom</h3><p>Alitas jugosas bañadas en salsa sweet chili, con sésamo negro y cebollino fresco.</p></div><strong>8.90€</strong></div>
-          <div class="menu-item"><div><h3>Alitas BBQ n' Kikos</h3><p>Doble cocción, salsa barbacoa intensa y topping de kikos crujientes.</p></div><strong>8.90€</strong></div>
-          <div class="menu-item"><div><h3>Capricho de Huerta</h3><p>Tomate corazón de buey, burrata cremosa, aceite de pesto y frutos secos.</p></div><strong>9.90€</strong></div>
-          <div class="menu-item"><div><h3>Pinna Capresse</h3><p>Base de masa madre con pulpa de tomate, mozzarella, jamón serrano, tomate fino, canónigos, pesto y queso Cebreiro.</p></div><strong>13.90€</strong></div>
-          <div class="menu-item"><div><h3>Pinna Mortazza</h3><p>Masa madre con tomate y mozzarella, mortadela ibérica, burrata, albahaca fresca y pesto.</p></div><strong>13.90€</strong></div>
-        </div>
-      </section>
-
-      <section class="accordion-item">
-        <button class="accordion-trigger">Bao Bao, Baby <span>+</span></button>
-        <div class="accordion-content">
-          <p class="menu-note">Pan suave, relleno potente. Dos bocados que te llevan directo al vicio.</p>
-          <div class="menu-item"><div><h3>Bao Boom Langostino</h3><p>Langostinos crujientes en panko, pico de gallo fresco, cebolla encurtida, mayo de kimchi y perlas de wasabi.</p></div><strong>8.90€</strong></div>
-          <div class="menu-item"><div><h3>Bao BBQ Addiction</h3><p>Costilla glaseada en BBQ, mermelada de bacon, cebolla frita y rúcula fresca.</p></div><strong>8.90€</strong></div>
-          <div class="menu-item"><div><h3>Bao Sweet Chilli Love</h3><p>Contramuslo de pollo glaseado en sweet chilli, con sésamo negro y cebollino.</p></div><strong>8.90€</strong></div>
-          <div class="menu-item"><div><h3>Bao Crum-Chicken</h3><p>Pollo rebozado en panko, guacamole, vinagreta de páprika y hilos de chile.</p></div><strong>8.90€</strong></div>
-        </div>
-      </section>
-
-      <section class="accordion-item">
-        <button class="accordion-trigger">Lo que engorda no se olvida <span>+</span></button>
-        <div class="accordion-content">
-          <p class="menu-note">Smash burgers con 2 carnes de 100g de ternera gallega bien chafadas a la plancha.</p>
-          <div class="menu-item"><div><h3>Cheese Bacon</h3><p>Carne smash, mermelada de bacon, salsa cheddar fundida, bacon crispy, tomate y cebolla frita.</p></div><strong>13.90€</strong></div>
-          <div class="menu-item"><div><h3>The GOAT</h3><p>Queso de cabra cremoso, cebolla caramelizada, rúcula y mayonesa suave.</p></div><strong>13.90€</strong></div>
-          <div class="menu-item"><div><h3>Guacamola</h3><p>Queso Arzúa Ulloa, guacamole casero, cebolla encurtida y jalapeños.</p></div><strong>13.90€</strong></div>
-          <div class="menu-item"><div><h3>Smash GULA</h3><p>Queso ahumado, costilla desmenuzada, kikos crujientes y salsa GULA secreta.</p></div><strong>14.90€</strong></div>
-          <div class="extra-box">
-            <p class="extra-title">¡Personalízala a tu gusto!</p>
-            <p>· Módulón de 200g por +1€</p>
-            <p>· Opción vegana por +1€</p>
-            <p>· Triple Smash (3 carnes) por +2€</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="accordion-item">
-        <button class="accordion-trigger">Aquí se viene a comer <span>+</span></button>
-        <div class="accordion-content">
-          <p class="menu-note">Platos serios. De los que se comen con hambre y te recuerdan con cariño.</p>
-          <div class="menu-item"><div><h3>Costilla BBQ Para Montar el Show</h3><p>Costillar glaseado con mini tortillas, guacamole, pico de gallo y cebolla encurtida para montarlo a tu gusto.</p></div><strong>19.90€</strong></div>
-          <div class="menu-item"><div><h3>Lasaña Bastarda</h3><p>Versión canalla de la clásica, con bolonesa potente y bechamel de queso ahumado.</p></div><strong>12.90€</strong></div>
-          <div class="menu-item"><div><h3>Brioche Goloso de Carrillera</h3><p>Pan brioche tostado, carrillera desmenuzada, mayo de ajo y toques crujientes y picantes.</p></div><strong>12.90€</strong></div>
-        </div>
-      </section>
-
-      <section class="accordion-item">
-        <button class="accordion-trigger">Lo dulce nunca duele <span>+</span></button>
-        <div class="accordion-content">
-          <p class="menu-note">Aquí no se viene a compartir. Se viene a pecar sin remordimientos.</p>
-          <div class="menu-item"><div><h3>Cremosa Clásica</h3><p>Tarta de queso al horno, casera, suave y fundente.</p></div><strong>5.00€</strong></div>
-          <div class="menu-item"><div><h3>Cremosa rompedietas</h3><p>Tarta de queso con mermelada de arándanos y crumble de mantequilla.</p></div><strong>6.50€</strong></div>
-          <div class="menu-item"><div><h3>Kinder Gula</h3><p>Cheesecake de Kinder Bueno, cremosa, intensa y adictiva.</p></div><strong>6.50€</strong></div>
-          <div class="menu-item"><div><h3>Lotus Lover</h3><p>Cheesecake con galleta Lotus por todos lados.</p></div><strong>6.50€</strong></div>
-        </div>
-      </section>
+  <main class="container">
+    <div class="menu-top">
+      <h1>Carta</h1>
     </div>
+
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Buscar por nombre o ingrediente..." autocomplete="off">
+      </div>
+      <div class="category-filter" id="filterButtons">
+        <button data-cat="all" class="active">Todas</button>
+        <button data-cat="Empieza el Delirium…">Delirium</button>
+        <button data-cat="Bao Bao, Baby">Baos</button>
+        <button data-cat="Lo que engorda no se olvida">Burgers</button>
+        <button data-cat="Aquí se viene a comer">Platos</button>
+        <button data-cat="Lo dulce nunca duele">Postres</button>
+      </div>
+    </div>
+
+    <div id="categoriesContainer"></div>
 
     <section class="menu-gallery">
       <h2>Referencias de la carta</h2>
@@ -101,7 +428,211 @@
     </section>
   </main>
 
-  <a href="https://share.google/LR1T3JtPwgAeuGcsm" target="_blank" rel="noopener" class="floating-cta">Cómo llegar</a>
-  <script src="script.js"></script>
+  <a href="https://share.google/LR1T3JtPwgAeuGcsm" target="_blank" rel="noopener" class="floating-cta"><i class="fas fa-map-marker-alt"></i> Cómo llegar</a>
+  <div class="go-top" id="goTopBtn"><i class="fas fa-chevron-up"></i></div>
+
+  <!-- Modal estructura -->
+  <div id="dishModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <p><strong id="modalPrice"></strong></p>
+      <div class="allergens" id="modalAllergens"></div>
+    </div>
+  </div>
+
+  <script>
+    // DATOS EXTRAÍDOS Y ESTRUCTURADOS desde el HTML original
+    const categoriesData = [
+      { name: "Empieza el Delirium…", note: "El hambre no espera turno. Empieza por aquí y déjate llevar.", items: [
+        { name: "Nacho criminal", desc: "Nachos caseros con guacamole cremoso, pico de gallo fresco, cheddar fundido, chilli con carne bien sazonado, jalapeños frescos y un toque de sour cream.", price: "11.90€" },
+        { name: "Trufados al barrio", desc: "Patatas corte gajo, envueltas por ligereza y llovidas por encima con mayonesa de trufa y lluvia de parmesano.", price: "6.50€" },
+        { name: "Patatas GULA", desc: "Nuestras patatas estrella: base de patatas gruesotas con costilla desmenuzada, salsa casera “GULA” y crujiente de kikos.", price: "8.50€" },
+        { name: "Solo Patatas, Pero Bien", desc: "Patatas estilo dipper para empezar el vicio.", price: "6.50€" },
+        { name: "Crunchy Finguers", desc: "Tiras de pollo rebozadas con panko, bien caseras, bien crocantes, acompañadas con sour cream.", price: "10.00€" },
+        { name: "Alitas Sweet Boom", desc: "Alitas jugosas bañadas en salsa sweet chili, con sésamo negro y cebollino fresco.", price: "8.90€" },
+        { name: "Alitas BBQ n' Kikos", desc: "Doble cocción, salsa barbacoa intensa y topping de kikos crujientes.", price: "8.90€" },
+        { name: "Capricho de Huerta", desc: "Tomate corazón de buey, burrata cremosa, aceite de pesto y frutos secos.", price: "9.90€" },
+        { name: "Pinna Capresse", desc: "Base de masa madre con pulpa de tomate, mozzarella, jamón serrano, tomate fino, canónigos, pesto y queso Cebreiro.", price: "13.90€" },
+        { name: "Pinna Mortazza", desc: "Masa madre con tomate y mozzarella, mortadela ibérica, burrata, albahaca fresca y pesto.", price: "13.90€" }
+      ]},
+      { name: "Bao Bao, Baby", note: "Pan suave, relleno potente. Dos bocados que te llevan directo al vicio.", items: [
+        { name: "Bao Boom Langostino", desc: "Langostinos crujientes en panko, pico de gallo fresco, cebolla encurtida, mayo de kimchi y perlas de wasabi.", price: "8.90€" },
+        { name: "Bao BBQ Addiction", desc: "Costilla glaseada en BBQ, mermelada de bacon, cebolla frita y rúcula fresca.", price: "8.90€" },
+        { name: "Bao Sweet Chilli Love", desc: "Contramuslo de pollo glaseado en sweet chilli, con sésamo negro y cebollino.", price: "8.90€" },
+        { name: "Bao Crum-Chicken", desc: "Pollo rebozado en panko, guacamole, vinagreta de páprika y hilos de chile.", price: "8.90€" }
+      ]},
+      { name: "Lo que engorda no se olvida", note: "Smash burgers con 2 carnes de 100g de ternera gallega bien chafadas a la plancha.", items: [
+        { name: "Cheese Bacon", desc: "Carne smash, mermelada de bacon, salsa cheddar fundida, bacon crispy, tomate y cebolla frita.", price: "13.90€" },
+        { name: "The GOAT", desc: "Queso de cabra cremoso, cebolla caramelizada, rúcula y mayonesa suave.", price: "13.90€" },
+        { name: "Guacamola", desc: "Queso Arzúa Ulloa, guacamole casero, cebolla encurtida y jalapeños.", price: "13.90€" },
+        { name: "Smash GULA", desc: "Queso ahumado, costilla desmenuzada, kikos crujientes y salsa GULA secreta.", price: "14.90€" }
+      ], extra: { title: "¡Personalízala a tu gusto!", lines: ["· Módulón de 200g por +1€", "· Opción vegana por +1€", "· Triple Smash (3 carnes) por +2€"] } },
+      { name: "Aquí se viene a comer", note: "Platos serios. De los que se comen con hambre y te recuerdan con cariño.", items: [
+        { name: "Costilla BBQ Para Montar el Show", desc: "Costillar glaseado con mini tortillas, guacamole, pico de gallo y cebolla encurtida para montarlo a tu gusto.", price: "19.90€" },
+        { name: "Lasaña Bastarda", desc: "Versión canalla de la clásica, con bolonesa potente y bechamel de queso ahumado.", price: "12.90€" },
+        { name: "Brioche Goloso de Carrillera", desc: "Pan brioche tostado, carrillera desmenuzada, mayo de ajo y toques crujientes y picantes.", price: "12.90€" }
+      ]},
+      { name: "Lo dulce nunca duele", note: "Aquí no se viene a compartir. Se viene a pecar sin remordimientos.", items: [
+        { name: "Cremosa Clásica", desc: "Tarta de queso al horno, casera, suave y fundente.", price: "5.00€" },
+        { name: "Cremosa rompedietas", desc: "Tarta de queso con mermelada de arándanos y crumble de mantequilla.", price: "6.50€" },
+        { name: "Kinder Gula", desc: "Cheesecake de Kinder Bueno, cremosa, intensa y adictiva.", price: "6.50€" },
+        { name: "Lotus Lover", desc: "Cheesecake con galleta Lotus por todos lados.", price: "6.50€" }
+      ]}
+    ];
+
+    // Función para generar alérgenos aleatorios pero consistentes (simulados)
+    function getAllergensForItem(name) {
+      const baseSet = new Set();
+      if (name.toLowerCase().includes("queso") || name.toLowerCase().includes("cheddar") || name.toLowerCase().includes("burrata")) baseSet.add("🥛 Lactosa");
+      if (name.toLowerCase().includes("gluten") || name.toLowerCase().includes("panko") || name.toLowerCase().includes("masa madre")) baseSet.add("🌾 Gluten");
+      if (name.toLowerCase().includes("nuez") || name.toLowerCase().includes("pesto") || name.toLowerCase().includes("frutos secos")) baseSet.add("🥜 Frutos secos");
+      if (name.toLowerCase().includes("crustaceo") || name.toLowerCase().includes("langostino")) baseSet.add("🦐 Crustáceos");
+      if (baseSet.size === 0) baseSet.add("🌱 Libre de alérgenos comunes");
+      if (baseSet.size === 1 && !baseSet.has("🌱 Libre de alérgenos comunes")) baseSet.add("🌾 Posible traza");
+      return Array.from(baseSet).slice(0,3);
+    }
+
+    let activeCategory = "all";
+    let searchTerm = "";
+
+    function renderCards() {
+      const container = document.getElementById("categoriesContainer");
+      if (!container) return;
+      let html = "";
+      for (let cat of categoriesData) {
+        // filtrar por categoría activa
+        if (activeCategory !== "all" && activeCategory !== cat.name) continue;
+        
+        let filteredItems = cat.items.filter(item => 
+          item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+          item.desc.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        
+        if (filteredItems.length === 0 && (!cat.extra || filterExtraBySearch(cat, searchTerm) === false)) {
+          if (searchTerm !== "") continue; // No mostrar categoría vacía
+        }
+        
+        html += `<div class="category-section" data-cat="${cat.name}">`;
+        html += `<h2 class="category-title">${cat.name}</h2>`;
+        html += `<p class="category-note">${cat.note}</p>`;
+        html += `<div class="cards-grid">`;
+        
+        for (let item of filteredItems) {
+          html += `
+            <div class="card" data-name="${item.name}" data-desc="${escapeHtml(item.desc)}" data-price="${item.price}">
+              <div>
+                <h3>${item.name} <span class="price">${item.price}</span></h3>
+                <p>${item.desc}</p>
+              </div>
+              <div style="margin-top: 8px; font-size: 0.8rem; color:#e67e22;"><i class="fas fa-info-circle"></i> Tocar para detalles</div>
+            </div>
+          `;
+        }
+        // extra box si existe (solo categoria de burgers)
+        if (cat.extra && searchTerm === "") {
+          html += `<div class="extra-box"><p class="extra-title">${cat.extra.title}</p>`;
+          cat.extra.lines.forEach(line => { html += `<p>${line}</p>`; });
+          html += `</div>`;
+        }
+        html += `</div></div>`;
+      }
+      if (html === "") html = `<div class="no-results">🍽️ No encontramos ningún plato con "${searchTerm}"</div>`;
+      container.innerHTML = html;
+      attachCardEvents();
+    }
+
+    function filterExtraBySearch(cat, term) {
+      if (!cat.extra) return false;
+      return cat.extra.title.toLowerCase().includes(term) || cat.extra.lines.some(l => l.toLowerCase().includes(term));
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+    function attachCardEvents() {
+      document.querySelectorAll('.card').forEach(card => {
+        card.removeEventListener('click', cardClickHandler);
+        card.addEventListener('click', cardClickHandler);
+      });
+    }
+
+    function cardClickHandler(e) {
+      const name = this.dataset.name;
+      const desc = this.dataset.desc;
+      const price = this.dataset.price;
+      const allergens = getAllergensForItem(name);
+      document.getElementById('modalTitle').innerText = name;
+      document.getElementById('modalDesc').innerText = desc;
+      document.getElementById('modalPrice').innerHTML = `Precio: ${price}`;
+      const allergensDiv = document.getElementById('modalAllergens');
+      allergensDiv.innerHTML = allergens.map(a => `<span style="background:#f0e6d8; padding:4px 12px; border-radius:30px;">${a}</span>`).join('');
+      if (document.body.classList.contains('dark')) {
+        document.querySelectorAll('#modalAllergens span').forEach(s => s.style.background = '#3a3a3a');
+      }
+      document.getElementById('dishModal').style.display = 'flex';
+    }
+
+    // filtros y búsqueda
+    function updateFiltersAndRender() {
+      renderCards();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      searchTerm = e.target.value;
+      updateFiltersAndRender();
+    });
+
+    const filterBtns = document.querySelectorAll('#filterButtons button');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const catValue = btn.getAttribute('data-cat');
+        activeCategory = catValue;
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateFiltersAndRender();
+      });
+    });
+
+    // modal eventos
+    const modal = document.getElementById('dishModal');
+    const closeModal = document.querySelector('.close-modal');
+    closeModal.addEventListener('click', () => modal.style.display = 'none');
+    window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'flex') modal.style.display = 'none'; });
+
+    // botón volver arriba
+    const goTopBtn = document.getElementById('goTopBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) goTopBtn.classList.add('show');
+      else goTopBtn.classList.remove('show');
+    });
+    goTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Modo oscuro localStorage
+    const darkToggle = document.getElementById('darkModeToggle');
+    const isDark = localStorage.getItem('gulaDark') === 'true';
+    if (isDark) document.body.classList.add('dark');
+    darkToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('gulaDark', document.body.classList.contains('dark'));
+      // re-aplicar estilo de alergenos en modal si está abierto
+      if (modal.style.display === 'flex') {
+        const spans = document.querySelectorAll('#modalAllergens span');
+        if (document.body.classList.contains('dark')) spans.forEach(s => s.style.background = '#3a3a3a');
+        else spans.forEach(s => s.style.background = '#f0e6d8');
+      }
+    });
+
+    // inicializar render
+    renderCards();
+  </script>
 </body>
 </html>
